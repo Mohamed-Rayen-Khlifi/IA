@@ -31,12 +31,10 @@ class Regime(Fact):
     pass
 
 # Définition des règles
-class NutritionEngine(KnowledgeEngine):
+class NutritionEngine(KnowledgeEngine):    
 
     @Rule(Sexe(value=MATCH.sex),Age(int_value=MATCH.age),Taille(int_value=MATCH.taille),Poids(int_value=MATCH.poids),Activity(MATCH.activity))
     def rule_calculate_caloric_needs(self, sex, age, taille, poids, activity):
-        # m = 66.5 + (13.75 * int(poids)) + (5 * int(taille)) - (6.75 * int(age)) if sex=="Female" else 655.1 + (9.563 * int(poids)) + (1.850 * int(taille)) - (4.676 * int(age))
-        # w = int(m) * 1.375 if activity == "Faible" else int(m) * 1.725
         if sex == "Female":
             m = 66.5 + (13.75 * int(poids)) + (5 * int(taille)) - (6.75 * int(age))
         elif sex == "Male":
@@ -48,49 +46,53 @@ class NutritionEngine(KnowledgeEngine):
             w = m * 1.55
         elif activity == "Intense":
             w = m * 1.725
-
-        print(f"\n *** Vos besoins caloriques sont de {round(w, 2)} calories par jour. ***\n")
+        with open("results.txt", "a") as file:
+            file.write(f"\n\n *** Vos besoins caloriques sont de {round(w, 2)} calories par jour. ***\n")
 
     @Rule(Cholesterol("Élevé"))
     def rule_recommandation_alimentaire_cholesterol(self):
-        print(" \n *** Recommendation pour un taux de cholestérol élevé *** \n")
-        print(" Les Aliments à éviter : \n -1- Les aliments riches en graisses saturées, tels que la viande rouge, la volaille avec la peau, les produits laitiers entiers et les aliments transformés, \n -2- Les aliments riches en graisses trans, tels que les aliments frits, les produits de boulangerie et les snacks, \n -3- Les aliments riches en sucres ajoutés, tels que les boissons sucrées, les bonbons, les biscuits et les gâteaux.")
-        print(" Les Aliments à recommender : \n -1- Les aliments riches en fibres, tels que les fruits, les légumes, les céréales complètes et les légumineuses, \n -2- Les aliments riches en oméga-3, tels que les poissons gras, les noix et les graines, \n -3- Les aliments riches en phytostérols, tels que les huiles végétales, les fruits et légumes.")
+        with open("results.txt", "a") as file:
+            file.write(" \n *** Recommendation pour un taux de cholestérol élevé *** \n")
+            file.write(" Les Aliments à éviter : \n -1- Les aliments riches en graisses saturées, tels que la viande rouge, la volaille avec la peau, les produits laitiers entiers et les aliments transformés, \n -2- Les aliments riches en graisses trans, tels que les aliments frits, les produits de boulangerie et les snacks, \n -3- Les aliments riches en sucres ajoutés, tels que les boissons sucrées, les bonbons, les biscuits et les gâteaux.")
+            file.write(" Les Aliments à recommender : \n -1- Les aliments riches en fibres, tels que les fruits, les légumes, les céréales complètes et les légumineuses, \n -2- Les aliments riches en oméga-3, tels que les poissons gras, les noix et les graines, \n -3- Les aliments riches en phytostérols, tels que les huiles végétales, les fruits et légumes.\n")
 
     @Rule(Sugar("Instable"))
     def rule_recommandation_alimentaire_sugar(self):
-        print(" \n *** Recommendation pour un indice de glycémie instable *** \n ")
-        print(" Les Aliments à éviter : \n -1- Les aliments à base de farine blanche (les pâtes blanches, le riz blanc et les céréales de petit-déjeuner sucrées), \n -2- Les aliments sucrés (les bonbons, les gâteaux, les glaces et les boissons sucrées), \n -3- Les aliments transformés (les pizzas, les hamburgers, les frites et les snacks).")
-        print(" Les Aliments à recommander : \n -1- Les aliments à base de farine complète (le pain complet, les pâtes complètes, le riz complet et les céréales), \n -2- Les fruits et légumes qui sont riches en fibres, en vitamines et en minéraux, \n -3- Les produits laitiers faibles en gras ou sans gras qui sont riches en protéines et calcium, \n -4- Les légumineuses qui fournissent du fibres et des glucides complexes.")
+        with open("results.txt", "a") as file:
+            file.write(" \n *** Recommendation pour un indice de glycémie instable *** \n ")
+            file.write(" Les Aliments à éviter : \n -1- Les aliments à base de farine blanche (les pâtes blanches, le riz blanc et les céréales de petit-déjeuner sucrées), \n -2- Les aliments sucrés (les bonbons, les gâteaux, les glaces et les boissons sucrées), \n -3- Les aliments transformés (les pizzas, les hamburgers, les frites et les snacks).")
+            file.write(" Les Aliments à recommander : \n -1- Les aliments à base de farine complète (le pain complet, les pâtes complètes, le riz complet et les céréales), \n -2- Les fruits et légumes qui sont riches en fibres, en vitamines et en minéraux, \n -3- Les produits laitiers faibles en gras ou sans gras qui sont riches en protéines et calcium, \n -4- Les légumineuses qui fournissent du fibres et des glucides complexes.\n")
 
     @Rule(Temperature("Élevée"), Activity("Intense"))
     def rule_recommandation_hydratation(self):
-        print("\n *** Recommandation pour l'hydratation *** \n ")
-        print(" -1- Buvez un verre d'eau avant, pendant et après les repas. \n -2- Ajoutez des fruits ou des légumes à vos boissons.  \n -3-  Mangez des aliments riches en eau, tels que les fruits, les légumes et les soupes. \n -4- Limitez votre consommation de caféine et d'alcool, car ils peuvent entraîner une déshydratation.")
+        with open("results.txt", "a") as file:
+            file.write("\n *** Recommandation pour l'hydratation *** \n ")
+            file.write(" -1- Buvez un verre d'eau avant, pendant et après les repas. \n -2- Ajoutez des fruits ou des légumes à vos boissons.  \n -3-  Mangez des aliments riches en eau, tels que les fruits, les légumes et les soupes. \n -4- Limitez votre consommation de caféine et d'alcool, car ils peuvent entraîner une déshydratation.")
 
     @Rule(Regime(value=MATCH.v))
     def rule_recommandation_supplements(self, v):
-        if v == "Vitamine A":
-            print(" \n *** Les aliments riches en vitamine A *** \n")
-            print(" -1- Les légumes à feuilles vertes, tels que les épinards, les blettes et le chou frisé. \n -2- Les carottes, les patates douces et les autres légumes orange ou jaunes. \n -3- Les fruits rouges et jaunes, tels que les abricots, les mangues et les poivrons rouges, \n -4- Le foie, le lait entier et les produits laitiers entiers. ")
-        elif v == "Vitamine C":
-            print(" \n *** Les aliments riches en vitamine C *** \n")
-            print(" -1- Les fruits frais, tels que les oranges, les citrons, les kiwis et les fraises. \n -2- Les légumes frais, tels que les poivrons, le brocoli et les choux de Bruxelles. \n -3- Les pommes de terre, les brocolis et les choux de Bruxelles cuits.")
-        elif v == "Vitamine B12":
-            print(" \n *** Les aliments riches en vitamine B12 *** \n")
-            print(" Les produits d'origine animale, tels que la viande, les fruits de mer, les œufs et les produits laitiers.")
-        elif v == "Fer":
-            print(" \n *** Les aliments riches en Fer *** \n")
-            print (" -1- La viande rouge, la volaille et le poisson. \n -2- Les légumes à feuilles vertes, tels que les épinards et les blettes. \n -3- Les légumineuses, telles que les lentilles, les haricots et les pois. \n -4- Les fruits secs, tels que les figues, les dattes et les raisins secs.")
+        with open("results.txt", "a") as file:
+            if v == "Vitamine A":
+                file.write(" \n *** Les aliments riches en vitamine A *** \n")
+                file.write(" -1- Les légumes à feuilles vertes, tels que les épinards, les blettes et le chou frisé. \n -2- Les carottes, les patates douces et les autres légumes orange ou jaunes. \n -3- Les fruits rouges et jaunes, tels que les abricots, les mangues et les poivrons rouges, \n -4- Le foie, le lait entier et les produits laitiers entiers. \n")
+            elif v == "Vitamine C":
+                file.write(" \n *** Les aliments riches en vitamine C *** \n")
+                file.write(" -1- Les fruits frais, tels que les oranges, les citrons, les kiwis et les fraises. \n -2- Les légumes frais, tels que les poivrons, le brocoli et les choux de Bruxelles. \n -3- Les pommes de terre, les brocolis et les choux de Bruxelles cuits.\n")
+            elif v == "Vitamine B12":
+                file.write(" \n *** Les aliments riches en vitamine B12 *** \n")
+                file.write(" Les produits d'origine animale, tels que la viande, les fruits de mer, les œufs et les produits laitiers.\n")
+            elif v == "Fer":
+                file.write(" \n *** Les aliments riches en Fer *** \n")
+                file.write (" -1- La viande rouge, la volaille et le poisson. \n -2- Les légumes à feuilles vertes, tels que les épinards et les blettes. \n -3- Les légumineuses, telles que les lentilles, les haricots et les pois. \n -4- Les fruits secs, tels que les figues, les dattes et les raisins secs.\n")
 
 
-
+# Declaration des attributs
 Nom, sex, age, taille, poids, cholesterol, sugar, temperature, activity, regime = None, None, None, None, None, None, None, None, None, None
 
 
 def execution():
-            
-    print("\n\n **** Bienvenue dans le système expert de conseil en nutrition personnalisée! **** \n\n ")
+    with open("results.txt", "a") as file:   
+        file.write("**** Bienvenue dans le système expert de conseil en nutrition personnalisée! **** \n\n ")
 
     global Nom
     global sex
@@ -105,21 +107,8 @@ def execution():
 
 
     engine = NutritionEngine()
-
-    # nom = entry_name.get()
-    # sexe = sex_combo.get()
-    # age = entry_age.get()
-    # poids = entry_poids.get()
-    # taille = entry_taille.get()
-    # cholesterol = chol_combo.get()
-    # sugar = sugar_combo.get()
-    # temperature = temp_combo.get()
-    # activity = activity_combo.get()
-    # regime = vitamins_combo.get()
-
-    print("\n\n\n")
-
     engine.reset()
+
     engine.declare(Sexe(value=sex))
     engine.declare(Age(int_value=age))
     engine.declare(Taille(int_value=taille))
@@ -160,16 +149,7 @@ def start_GUI():
         regime = vitamins_combo.get()
         taille = entry_taille.get()
         poids = entry_poids.get()
-        print(f"Nom: {Nom}")
-        print(f"Sex: {sex}")
-        print(f"Age: {age}")
-        print(f"Height: {taille}")
-        print(f"Weight: {poids}")
-        print(f"Cholesterol Level: {cholesterol}")
-        print(f"Blood Sugar Level: {sugar}")
-        print(f"Ambient Temperature: {temperature}")
-        print(f"Activity Level: {activity}")
-        print(f"Missing Vitamins: {regime}")
+
         # Create a label inside the frame
         label_tkinter = tk.Label(
             window,
@@ -181,11 +161,6 @@ def start_GUI():
         label_tkinter.grid(row=12, column=0, sticky="nsew", padx=(0, 5))
 
         return True
-
-
-        # # Create an entry widget (text box) inside the poids_frame
-        # entry_response = tk.Entry(window, font=("Arial", 12))
-        # entry_response.grid(row=12, columnspan=5, rowspan=5, sticky="nsew", padx=100)
 
 
     # Create the main window
@@ -396,9 +371,6 @@ def start_GUI():
     )
     submit_button.grid(row=11, column=0, columnspan=2, padx=10, pady=10)
 
-
-
-
     # Set the window size and center it on the screen
     window_width = 1600
     window_height = 1600
@@ -409,7 +381,7 @@ def start_GUI():
     window.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
 
     # Start the main event loop
-    window.after(20000, execution)
+    window.after(25000, execution)
     window.mainloop()
 
 
